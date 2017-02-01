@@ -1,0 +1,66 @@
+@model AccountingApp.Models.BillViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3><img src="~/images/invoice_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / <a asp-action="Index">Invoices</a> / Details</h3>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.CustomerID)
+        </dt>
+        <dd>
+            @Model.customers.First(c => c.ID == Model.bill.CustomerID).Name
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Number)
+        </dt>
+        <dd>
+            #@Html.DisplayFor(model => model.bill.Number)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.bill.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.bill.Amount)
+        </dd>
+    </dl>
+    <div class="form-group">
+        <h5>TIME ENTRIES</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Duration</th>
+                    <th>Project</th>
+                    <th>Memo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.times)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Duration)</td>
+                        <td>@Model.projects.First(c => c.ID == item.ProjectID).Name</td>
+                        <td>@Html.DisplayFor(modelItem => item.Memo)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="tool-links">
+    <a asp-action="Index">Back to List</a> | <a href="#" class="print-btn">Print Invoice</a>
+</div>

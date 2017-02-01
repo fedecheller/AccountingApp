@@ -1,0 +1,129 @@
+@model TimesViewModel
+
+@{
+    ViewData["Title"] = "Time Tracking";
+    int totalHours = 0;
+}
+
+@functions
+{
+    public string getOption(int id, string name, int? customerFilter)
+    {
+        string result = "<option value=" + id.ToString();
+        if (customerFilter.HasValue && customerFilter.Value == id)
+        {
+            result += " selected";
+        }
+        result += ">" + name + "</option>";
+        return result;
+    }
+    public string getDate(DateTime? date)
+    {
+        string result = "";
+        if(date.HasValue)
+        {
+            result = date.Value.ToString("yyyy-MM-dd");
+        }
+        return result;
+    }
+}
+<h3><img src="~/images/time_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / Time Tracking</h3>
+<h4 class="printable">Time entries</h4>
+<p class="tool-links">
+    <a asp-action="Create">Create New</a> | <a href="#" class="print-btn">Print Time entries</a> | <a asp-action="Weekly">Weekly view</a> | <a href="#" data-toggle="collapse" data-target="#filters">Filters</a>
+</p>
+<div id="filters" class="filter @ViewData["DisplayFilter"]">
+    <div class="container">
+        <form asp-action="Index" method="get">
+            <div class="form-group row">
+                <label for="billedfilter" class="col-sm-2 col-form-label">Billed</label>
+                <div class="col-sm-10">
+                    <select name="billedfilter" id="billedfilter" class="form-control">
+                        @Html.Raw(getOption(0, "All", Model.billedFilter));
+                        @Html.Raw(getOption(1, "No", Model.billedFilter));
+                        @Html.Raw(getOption(2, "Yes", Model.billedFilter));
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="startdatefilter" class="col-sm-2 col-form-label">Start date</label>
+                <div class="col-sm-10">
+                    <input type="date" id="startdatefilter" name="startdatefilter" value="@Html.Raw(getDate(Model.startDateFilter))" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="enddatefilter" class="col-sm-2 col-form-label">End date</label>
+                <div class="col-sm-10">
+                    <input type="date" id="enddatefilter" name="enddatefilter" value="@Html.Raw(getDate(Model.endDateFilter))" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="customerfilter" class="col-sm-2 col-form-label">Customer</label>
+                <div class="col-sm-10">
+                    <select name="customerfilter" id="customerfilter" class="form-control">
+                        @foreach (var item in Model.customers)
+                        {
+                            @Html.Raw(getOption(item.ID, item.Name, Model.customerFilter));
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input type="submit" value="Filter" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Billed</th>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Customer</th>
+            <th>Project</th>
+            <th>Memo</th>
+            <th class="tool-links"></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.times) {
+            totalHours += item.Duration;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Billed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Model.customers.First(c => c.ID == item.CustomerID).Name
+            </td>
+            <td>
+                @Model.projects.First(c => c.ID == item.ProjectID).Name
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Memo)
+            </td>
+            <td class="tool-links">
+                @if (!item.Billed)
+                {
+                    <p><a asp-action="Edit" asp-route-id="@item.ID">Edit</a> | <a asp-action="Delete" asp-route-id="@item.ID">Delete</a></p>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr class="tr-footer">
+            <th colspan="2">Total hours:</th>
+            <th colspan="5">@totalHours</th>
+        </tr>
+    </tfoot>
+</table>

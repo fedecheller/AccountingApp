@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Accounting Application</h2>
+        <ul class="nav navbar-nav ribbon-menu">
+            <li><a asp-area="" asp-controller="Times" asp-action="Index"><img src="~/images/time.png" /> <span>Track time</span></a></li>
+            <li><a asp-area="" asp-controller="Bills" asp-action="Index"><img src="~/images/invoice.png" /> <span>Invoices</span></a></li>
+            <li><a asp-area="" asp-controller="Customers" asp-action="Index"><img src="~/images/customer.png" /> <span>Customers</span></a></li>
+            <li><a asp-area="" asp-controller="Projects" asp-action="Index"><img src="~/images/project.png" /> <span>Projects</span></a></li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+@model AccountingApp.Models.TimeViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3><img src="~/images/time_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / <a asp-action="Index">Time Tracking</a> / Edit</h3>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Time</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="time.ID" />
+        <div class="form-group">
+            <label asp-for="time.Date" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="time.Date" class="form-control" />
+                <span asp-validation-for="time.Date" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="time.Duration" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="time.Duration" class="form-control" placeholder="hour" />
+                <span asp-validation-for="time.Duration" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="time.Memo" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="time.Memo" class="form-control"></textarea>
+                <span asp-validation-for="time.Memo" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="time.CustomerID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="time.CustomerID" class="form-control">
+                    @foreach (var item in Model.customers)
+                    {
+                        <option value="@item.ID">@item.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="time.CustomerID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="time.ProjectID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="time.ProjectID" class="form-control">
+                    @foreach (var item in Model.projects)
+                    {
+                        <option value="@item.ID">@item.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="time.ProjectID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-1">
+                <input type="submit" value="Save" class="btn btn-default" 
+                    @if(Model.time.Billed)
+                    {
+                        <text>disabled alt="The time is billed"</text>
+                    } />
+            </div>
+            <div class="col-md-1">
+                <a asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

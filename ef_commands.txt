@@ -1,0 +1,8 @@
+- Go to project path from command prompt:
+cd C:\Users\Federico_2\Documents\Visual Studio 2015\Projects\AccountingApp\src\AccountingApp
+
+- Add new migration from command prompt:
+dotnet ef migrations add my_migration_name
+
+- Update database from command prompt:
+dotnet ef database update

@@ -1,0 +1,56 @@
+@model AccountingApp.Models.TimeViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h3><img src="~/images/time_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / <a asp-action="Index">Time Tracking</a> / Delete</h3>
+
+<div>
+    <h4>Time</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.time.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.time.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.time.Duration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.time.Duration)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.time.Memo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.time.Memo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.time.CustomerID)
+        </dt>
+        <dd>
+            @Model.customers.First(c => c.ID == Model.time.CustomerID).Name
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.time.ProjectID)
+        </dt>
+        <dd>
+            @Model.projects.First(c => c.ID == Model.time.ProjectID).Name
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <div class="col-md-offset-1 col-md-1">
+                <input type="submit" value="Delete" class="btn btn-default" />
+            </div>
+            <div class="col-md-1">
+                <a asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <br /><br />
+</div>

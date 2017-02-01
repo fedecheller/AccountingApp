@@ -1,0 +1,173 @@
+﻿@model TimesViewModel
+
+@{
+    ViewData["Title"] = "Weekly Time Tracking";
+}
+
+@functions
+{
+    public string getDate(DateTime? date, string format)
+    {
+        string result = "";
+        if (date.HasValue)
+        {
+            result = date.Value.ToString(format);
+        }
+        return result;
+    }
+
+    public List<WeekTimeViewModel> getGroupedTimes(List<Time> times)
+    {
+        List<WeekTimeViewModel> listWeekTimeViewModel = new List<WeekTimeViewModel>() {};
+
+        var distinctTimes =
+            from t in times
+            group t by new
+            {
+                t.CustomerID,
+                t.ProjectID
+            } into gcs
+            select new Time()
+            {
+                ProjectID = gcs.Key.ProjectID,
+                CustomerID = gcs.Key.CustomerID
+            };
+
+        foreach(var distinctTime in distinctTimes)
+        {
+            WeekTimeViewModel weekTimeViewModel = new WeekTimeViewModel();
+            weekTimeViewModel.CustomerName = Model.customers.First(c => c.ID == distinctTime.CustomerID).Name;
+            weekTimeViewModel.ProjectName = Model.projects.First(c => c.ID == distinctTime.ProjectID).Name;
+
+            foreach(var time in times)
+            {
+                if(time.ProjectID == distinctTime.ProjectID && time.CustomerID == distinctTime.CustomerID)
+                {
+                    weekTimeViewModel.CustomerID = time.CustomerID;
+                    weekTimeViewModel.ProjectID = time.ProjectID;
+                    DateTime d = Model.startDateFilter.Value;
+                    for(int i = 0; i < 7; i++)
+                    {
+                        if(d == time.Date)
+                        {
+                            switch (i)
+                            {
+                                case 0:
+                                    weekTimeViewModel.MonHours = time.Duration;
+                                    break;
+                                case 1:
+                                    weekTimeViewModel.TueHours = time.Duration;
+                                    break;
+                                case 2:
+                                    weekTimeViewModel.WedHours = time.Duration;
+                                    break;
+                                case 3:
+                                    weekTimeViewModel.ThuHours = time.Duration;
+                                    break;
+                                case 4:
+                                    weekTimeViewModel.FriHours = time.Duration;
+                                    break;
+                                case 5:
+                                    weekTimeViewModel.SatHours = time.Duration;
+                                    break;
+                                case 6:
+                                    weekTimeViewModel.SunHours = time.Duration;
+                                    break;
+                            }
+                        }
+                        d = d.AddDays(1);
+                    }
+                }
+            }
+
+
+            listWeekTimeViewModel.Add(weekTimeViewModel);
+        }
+
+        return listWeekTimeViewModel.OrderBy(m => m.CustomerName).ToList();
+
+    }
+}
+<h3><img src="~/images/time_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / Weekly Time Tracking</h3>
+<h4 class="printable">Time entries</h4>
+<p class="tool-links">
+    <a asp-action="Create">Create New</a> | <a href="#" class="print-btn">Print Time entries</a> | <a asp-action="Index">List view</a>
+</p>
+<form asp-action="Weekly" method="get" id="weekly-search">
+    <input type="hidden" id="startdatefilter" name="startdatefilter" value="2017-01-23" />
+    <div class="container">
+        <div class="col-sm-12" style="width:240px;">
+            <div class="form-group row">
+                <label for="startDateTimePicker" class="col-sm-3 col-form-label">Week</label>
+                <div class="col-sm-9">
+                    <div class="input-group date" id="startDateTimePicker">
+                        <input type="text" class="form-control" value="@Html.Raw(getDate(Model.startDateFilter, "dd/MM/yyyy"))" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table table-week">
+    <thead>
+        <tr>
+            <th class="th-left">Customer</th>
+            <th class="th-left">Project</th>
+            <th>Monday @Model.startDateFilter.Value.ToString("dd/MM/yyyy")</th>
+            <th>Tuesday @Model.startDateFilter.Value.AddDays(1).ToString("dd/MM/yyyy")</th>
+            <th>Wednesday @Model.startDateFilter.Value.AddDays(2).ToString("dd/MM/yyyy")</th>
+            <th>Thursday @Model.startDateFilter.Value.AddDays(3).ToString("dd/MM/yyyy")</th>
+            <th>Friday @Model.startDateFilter.Value.AddDays(4).ToString("dd/MM/yyyy")</th>
+            <th>Saturday @Model.startDateFilter.Value.AddDays(5).ToString("dd/MM/yyyy")</th>
+            <th>Sunday @Model.startDateFilter.Value.AddDays(6).ToString("dd/MM/yyyy")</th>
+        </tr>
+    </thead>
+    <tbody>
+    @{ 
+        int mon = 0;
+        int tue = 0;
+        int wed = 0;
+        int thu = 0;
+        int fri = 0;
+        int sat = 0;
+        int sun = 0;
+    }
+    @foreach (var item in getGroupedTimes(Model.times))
+    {
+        mon += item.MonHours;
+        tue += item.TueHours;
+        wed += item.WedHours;
+        thu += item.ThuHours;
+        fri += item.FriHours;
+        sat += item.SatHours;
+        sun += item.SunHours;
+        <tr>
+            <td class="td-left"><a asp-controller="Customers" asp-action="Edit" asp-route-id="@item.CustomerID">@item.CustomerName</a></td>
+            <td class="td-left"><a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.ProjectID">@item.ProjectName</a></td>
+            <td>@item.MonHours</td>
+            <td>@item.TueHours</td>
+            <td>@item.WedHours</td>
+            <td>@item.ThuHours</td>
+            <td>@item.FriHours</td>
+            <td class="cell-weekend">@item.SatHours</td>
+            <td class="cell-weekend">@item.SunHours</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr class="tr-footer">
+            <th colspan="2">Totals</th>
+            <th>@mon</th>
+            <th>@tue</th>
+            <th>@wed</th>
+            <th>@thu</th>
+            <th>@fri</th>
+            <th class="cell-weekend">@sat</th>
+            <th class="cell-weekend">@sun</th>
+        </tr>
+    </tfoot>
+</table>

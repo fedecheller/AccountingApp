@@ -1,0 +1,51 @@
+@model AccountingApp.Models.BillViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h3><img src="~/images/invoice_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / <a asp-action="Index">Invoices</a> / Delete</h3>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.CustomerID)
+        </dt>
+        <dd>
+            @Model.customers.First(c => c.ID == Model.bill.CustomerID).Name
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Number)
+        </dt>
+        <dd>
+            #@Html.DisplayFor(model => model.bill.Number)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.bill.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.bill.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.bill.Amount)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <div class="col-md-offset-1 col-md-1">
+                <input type="submit" value="Delete" class="btn btn-default" />
+            </div>
+            <div class="col-md-1">
+                <a asp-action="Index" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <br /><br />
+</div>

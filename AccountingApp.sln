@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2B09362C-CB78-4673-9755-9BB2B9A7B583}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D42D8B9-BC9F-4F88-9EBB-0DD52E0803C4}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AccountingApp", "src\AccountingApp\AccountingApp.xproj", "{6541C4B3-EF67-46E3-8205-4534A8A207F3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AccountingApp.Tests", "src\AccountingApp.Tests\AccountingApp.Tests.xproj", "{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6541C4B3-EF67-46E3-8205-4534A8A207F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6541C4B3-EF67-46E3-8205-4534A8A207F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6541C4B3-EF67-46E3-8205-4534A8A207F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6541C4B3-EF67-46E3-8205-4534A8A207F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6541C4B3-EF67-46E3-8205-4534A8A207F3} = {2B09362C-CB78-4673-9755-9BB2B9A7B583}
+		{B24C36C5-C3DD-48ED-97C0-2DF4BDE9828F} = {2B09362C-CB78-4673-9755-9BB2B9A7B583}
+	EndGlobalSection
+EndGlobal

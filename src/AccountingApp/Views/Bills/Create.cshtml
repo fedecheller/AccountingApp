@@ -1,0 +1,125 @@
+@model AccountingApp.Models.BillViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3><img src="~/images/invoice_s.png" /> <a asp-controller="Home" asp-action="Index">Home</a> / <a asp-action="Index">Invoices</a> / Create</h3>
+
+<h4>Invoice</h4>
+<hr />
+@if(Model.customerSelected == null)
+{
+    <form asp-controller="Bills" asp-action="Create" method="get">
+        <div class="form-horizontal">      
+            <div class="form-group">
+                <label class="col-md-2 control-label">Customer</label>
+                <div class="col-md-10">
+                    <select class="form-control" name="customer">
+                        @foreach (var item in Model.customers)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Next" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <form asp-controller="Bills" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" name="customerSelected_ID" asp-for="customerSelected.ID" />
+        <input type="hidden" name="number" id="number" />
+        <input type="hidden" name="amount" id="amount" />
+        <input type="hidden" name="date" id="date" />
+        <input type="hidden" name="times" id="times" />
+        <input type="hidden" name="hourprice" id="hourprice" value="@Model.hourPrice" />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-2 control-label">Customer</label>
+                <div class="col-md-10">
+                    <input asp-for="customerSelected.Name" class="form-control" readonly />
+               
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="bill.Number" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="bill.Number" class="form-control" readonly />
+                    <span asp-validation-for="bill.Number" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="bill.Amount" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="bill.Amount" class="form-control" />
+                    <span asp-validation-for="bill.Amount" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="bill.Date" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="bill.Date" class="form-control" />
+                    <span asp-validation-for="bill.Date" class="text-danger" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h5>TIME ENTRIES</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Date</th>
+                            <th>Duration</th>
+                            <th>Project</th>
+                            <th>Memo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.times)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="checktime" />
+                                    <input type="hidden" value="@item.ID" />
+                                    <input type="hidden" value="@item.Duration" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Duration)</td>
+                                <td>@Model.projects.First(c => c.ID == item.ProjectID).Name</td>
+                                <td>@Html.DisplayFor(modelItem => item.Memo)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                @if (Model.times.Count > 0)
+                {
+                    <input type="submit" value="Create" class="btn btn-default bill-create" />
+                }
+                else
+                {
+                    <label class="control-label">There are no time entries for the selected customer</label>
+                }
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
